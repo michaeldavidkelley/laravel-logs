@@ -35,9 +35,13 @@ class LogListCommand extends LogCommand
      */
     public function handle()
     {
-        $loggingType = $this->getLogType();
-        $logPath = $this->getLogPath($loggingType);
+        $files = $this->getLogFiles();
 
-        $this->info($logPath);
+        if (count($files) == 0) {
+            $this->error('No log files found.');
+            exit;
+        }
+
+        $this->info(implode("\n", $files));
     }
 }

@@ -25,7 +25,13 @@ abstract class LogCommand extends Command
 
     protected function getLogPath($loggingType)
     {
-        $logPath = storage_path('logs/laravel.log');
+        $filename = 'laravel.log';
+
+        if ($loggingType == 'daily') {
+            $filename = 'laravel-'.date('Y-m-d').'.log';
+        }
+
+        $logPath = storage_path('logs/' . $filename);
 
         if (!is_file($logPath)) {
             $this->error('Log file could not be found! ['.$logPath.']');
@@ -47,5 +53,20 @@ abstract class LogCommand extends Command
         }
 
         return $loggingType;
+    }
+
+    protected function getLogFiles()
+    {
+        $files = [];
+
+        $filesInDirectory = \File::allFiles(storage_path());
+
+        foreach ($filesInDirectory as $file) {
+            if (preg_match('/laravel(-[0-9]{4}-[0-9]{2}-[0-9]{2})?\.log/', $file, $matches)) {
+                $files[] = $file;
+            }
+        }
+
+        return $files;
     }
 }

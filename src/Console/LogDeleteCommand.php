@@ -25,15 +25,14 @@ class LogDeleteCommand extends LogCommand
      */
     public function handle()
     {
-        $loggingType = $this->getLogType();
-        $logPath = $this->getLogPath($loggingType);
+        $files = $this->getLogFiles();
 
-        if (!unlink($logPath)) {
-            $this->error('Could not delete the log file.');
-
-            return;
-        }
-
-        $this->info('Log File Successfully Deleted.');
+        collect($files)->each(function ($file) {
+            if (!unlink($file)) {
+                $this->error('Could not delete the log file: ' . $file);
+            } else {
+                $this->info('Deleted log file: ' . $file);
+            }
+        });
     }
 }
