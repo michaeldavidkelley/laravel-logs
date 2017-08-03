@@ -2,9 +2,7 @@
 
 namespace MichaelDavidKelley\LaravelLogs\Console;
 
-use Illuminate\Console\Command;
-
-class LogMailCommand extends Command
+class LogMailCommand extends LogCommand
 {
     /**
      * The name and signature of the console command.
@@ -37,42 +35,37 @@ class LogMailCommand extends Command
      */
     public function handle()
     {
-        $email = $this->argument('email');
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->error('The email is not valid.');
-
-            return;
-        }
-
-
-        $loggingType = config('app.log');
-
-        if (!$loggingType) {
-            $this->error('Could not determine the logging type (app.log)');
-
-            return;
-        }
-
+        $emails = $this->getEmails();
+        $loggingType = $this->getLogType();
         $logPath = $this->getLogPath($loggingType);
 
-        if (!is_file($logPath)) {
-            $this->error('Log file could not be found! ['.$logPath.']');
+        $subject = config('app.name', 'Laravel Project') . ' - Log File - ' . date('Y-m-d H:i:s');
 
-            return;
-        }
-
-        \Mail::raw('Log file is attached.', function ($message) use ($email, $logPath) {
-            $message->subject(config('app.name', 'Laravel Project') . ' - Log File - ' . date('Y-m-d H:i:s'));
-
-            $message->to($email);
-
-            $message->attach($logPath);
+        $emails->each(function ($email) use ($logPath, $subject) {
+            try {
+                \Mail::raw('Log file is attached.', function ($message) use ($email, $logPath, $subject) {
+                    $message->subject($subject)->to($email)->attach($logPath);
+                });
+                $this->info('Emailed Log file to ' . $email);
+            } catch (\Exception $e) {
+                $this->error("Could not send the email [{$email}]: {$e->getMessage()}");
+            }
         });
     }
 
-    private function getLogPath($loggingType)
+    private function getEmails()
     {
-        return storage_path('logs/laravel.log');
+        $emails = collect(explode(',', $this->argument('email')));
+        $badEmails = $emails->reject(function ($email) {
+            return filter_var($email, FILTER_VALIDATE_EMAIL);
+        })->each(function ($email) {
+            $this->error("Invalid Email [{$email}].");
+        });
+
+        if ($badEmails->count()) {
+            exit;
+        }
+
+        return $emails;
     }
 }

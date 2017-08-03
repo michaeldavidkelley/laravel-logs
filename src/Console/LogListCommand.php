@@ -2,9 +2,7 @@
 
 namespace MichaelDavidKelley\LaravelLogs\Console;
 
-use Illuminate\Console\Command;
-
-class LogListCommand extends Command
+class LogListCommand extends LogCommand
 {
     /**
      * The name and signature of the console command.
@@ -37,27 +35,9 @@ class LogListCommand extends Command
      */
     public function handle()
     {
-        $loggingType = config('app.log');
-
-        if (!$loggingType) {
-            $this->error('Could not determine the logging type (app.log)');
-
-            return;
-        }
-
+        $loggingType = $this->getLogType();
         $logPath = $this->getLogPath($loggingType);
 
-        if (!is_file($logPath)) {
-            $this->error('Log file could not be found! ['.$logPath.']');
-
-            return;
-        }
-
         $this->info($logPath);
-    }
-
-    private function getLogPath($loggingType)
-    {
-        return storage_path('logs/laravel.log');
     }
 }

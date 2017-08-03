@@ -2,9 +2,7 @@
 
 namespace MichaelDavidKelley\LaravelLogs\Console;
 
-use Illuminate\Console\Command;
-
-class LogTailCommand extends Command
+class LogTailCommand extends LogCommand
 {
     /**
      * The name and signature of the console command.
@@ -37,21 +35,8 @@ class LogTailCommand extends Command
      */
     public function handle()
     {
-        $loggingType = config('app.log');
-
-        if (!$loggingType) {
-            $this->error('Could not determine the logging type (app.log)');
-
-            return;
-        }
-
+        $loggingType = $this->getLogType();
         $logPath = $this->getLogPath($loggingType);
-
-        if (!is_file($logPath)) {
-            $this->error('Log file could not be found! ['.$logPath.']');
-
-            return;
-        }
 
         $handle = popen("tail -F $logPath 2>&1", 'r');
 
@@ -60,10 +45,5 @@ class LogTailCommand extends Command
         }
 
         pclose($handle);
-    }
-
-    private function getLogPath($loggingType)
-    {
-        return storage_path('logs/laravel.log');
     }
 }
