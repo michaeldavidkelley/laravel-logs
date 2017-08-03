@@ -14,5 +14,12 @@
         "psr-4": {
             "MichaelDavidKelley\\LaravelLogs\\": "michaeldavidkelley/laravel-logs/src"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MichaelDavidKelley\\LaravelLogs\\ServiceProvider"
+            ]
+        }
     }
 }
