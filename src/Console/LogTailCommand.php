@@ -4,7 +4,7 @@ namespace MichaelDavidKelley\LaravelLogs\Console;
 
 use Illuminate\Console\Command;
 
-class TailLogCommand extends Command
+class LogTailCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -18,7 +18,7 @@ class TailLogCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Tail the current laravel log file';
+    protected $description = 'Tail the current Laravel log file';
 
     /**
      * Create a new command instance.
@@ -45,7 +45,7 @@ class TailLogCommand extends Command
             return;
         }
 
-        $logPath = storage_path('logs/laravel.log');
+        $logPath = $this->getLogPath($loggingType);
 
         if (!is_file($logPath)) {
             $this->error('Log file could not be found! ['.$logPath.']');
@@ -60,5 +60,10 @@ class TailLogCommand extends Command
         }
 
         pclose($handle);
+    }
+
+    private function getLogPath($loggingType)
+    {
+        return storage_path('logs/laravel.log');
     }
 }
