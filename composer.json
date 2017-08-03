@@ -12,7 +12,7 @@
         "classmap": [
         ],
         "psr-4": {
-            "MichaelDavidKelley\\LaravelLogs\\": "michaeldavidkelley/laravel-logs/src"
+            "MichaelDavidKelley\\LaravelLogs\\": "src/"
         }
     },
     "extra": {
