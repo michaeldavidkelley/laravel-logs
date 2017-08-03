@@ -1,6 +1,8 @@
 {
     "name": "michaeldavidkelley/laravel-logs",
-    "description": "",
+    "description": "Artisan commands to interact with logs.",
+    "license": "MIT",
+    "type": "library",
     "authors": [
         {
             "name": "Michael Kelley",
