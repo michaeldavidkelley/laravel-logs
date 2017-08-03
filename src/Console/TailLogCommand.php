@@ -1,6 +1,6 @@
 <?php
 
-namespace MichaelDavidKelley\LaravelTailLog\Console;
+namespace MichaelDavidKelley\LaravelLogs\Console;
 
 use Illuminate\Console\Command;
 

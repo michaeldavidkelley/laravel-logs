@@ -1,6 +1,6 @@
 <?php
 
-namespace MichaelDavidKelley\LaravelTailLog;
+namespace MichaelDavidKelley\LaravelLogs;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -22,7 +22,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this->commands([
-            \MichaelDavidKelley\LaravelTailLog\Console\TailLogCommand::class
+            \MichaelDavidKelley\LaravelLogs\Console\TailLogCommand::class
         ]);
     }
 }

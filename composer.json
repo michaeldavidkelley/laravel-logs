@@ -1,5 +1,5 @@
 {
-    "name": "michaelkelley/laravel-tail-log",
+    "name": "michaelkelley/laravel-logs",
     "description": "",
     "authors": [
         {
@@ -12,7 +12,7 @@
         "classmap": [
         ],
         "psr-4": {
-            "MichaelDavidKelley\\LaravelTailLog\\": "michaeldavidkelley/laravel-tail-log/src"
+            "MichaelDavidKelley\\LaravelLogs\\": "michaeldavidkelley/laravel-logs/src"
         }
     }
 }
